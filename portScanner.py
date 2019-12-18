@@ -135,11 +135,10 @@ def main():
                     index))
             threads.append(t)
 
-        for index, thread in enumerate(threads):  # run the threads
+        for index in range(len(threads)):  # run the threads
             threads[index].start()
 
-        for index, thread in enumerate(
-                threads):  # lock them to prevent critical section errors
+        for index in range(len(threads)):  # lock them to prevent critical section errors
             threads[index].join()
 
         for res in results:
