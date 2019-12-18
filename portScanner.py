@@ -92,20 +92,6 @@ def get_args():
         action="store_true",
         default=False)
 
-    parser.add_argument(
-        "-i",
-        "--ip",
-        help="Will get hostname by ip address EX: xx.xx.xxx.xxx",
-        action="store_true",
-        default=False)
-
-    parser.add_argument(
-        "-n",
-        "--name",
-        help="Will get hostname by name EX: www.google.com",
-        action="store_true",
-        default=False)
-
     return parser.parse_args()
 
 
@@ -122,7 +108,7 @@ def main():
         results
         void
     """
-    port_range = range(1, 1000, 1)  # Range of ports to scan
+    port_range = range(1, 1001, 1)  # Range of ports to scan
     threads = []
     results = {}
 
@@ -130,25 +116,14 @@ def main():
 
     subprocess.call("clear", shell=True)  # clear shell screen
 
-    if my_args.ip and my_args.name:
-        print("You must get the host either by name or by IP not both. Please try again")
-        sys.exit()
-    
-    elif my_args.name:
+    try:
+
         # get by name if a website name is entered
         server_ip = socket.gethostbyname(my_args.target)
-    
-    else:
-        server_ip = socket.gethostbyaddr(my_args.target)  # get by IP address
 
-        # gethostbyaddr returns a 3-tuple we want the last entry
-        server_ip = server_ip[2]
+        print("Scanning {} \n".format(server_ip))
+        print("Open ports: \n")
 
-    print("Scanning {} \n".format(server_ip))
-
-    print("Open ports: \n")
-
-    try:
         for index, port in enumerate(port_range):  # populate the threads
             t = threading.Thread(
                 target=scan_port,
